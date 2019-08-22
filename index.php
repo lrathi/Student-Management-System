@@ -83,7 +83,7 @@
 							
 								<a href="update.php?id=<?php echo $row['id'] ?>" class="btn btn-sm btn-warning" >EDIT</a>
 							
-								<a href="delete.php?id=<?php echo $row['id'] ?>" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-danger" >DELETE</a>
+								<a href="delete.php?id=<?php echo $row['id'] ?>" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-sm btn-danger">DELETE</a>
 							</td>
 						</tr>
 							<?php

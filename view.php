@@ -45,12 +45,13 @@
 			    	<thead>
 			     	 <tr class="bg-dark text-white text-center">
 			      		<th>Serial No.</th>
-			       	 	<th>Firstname</th>
-			       		<th>Lastname</th>
+			       	 	<th>First Name</th>
+			       		<th>Last Name</th>
 			       	 	<th>Email</th>
 			       		<th>Phone No.</th>
 			        	<th>Address</th>
 			        	<th>Course Selected</th>
+			        	<th>Actions</th>
 			      	</tr>
 			    	</thead>
 			    	<tbody>
@@ -83,6 +84,10 @@
 									<td><?php echo $row['phone']; ?> </td>
 									<td><?php echo $row['address']; ?></td>
 									<td><?php echo $row['course']; ?></td>
+									<td>
+										<a href="update.php?id=<?php echo $row['id'] ?>" class="btn btn-sm btn-warning" > Edit </a>
+										<a href="delete.php?id=<?php echo $row['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')" >Delete</a>
+									</td>
 								</tr>
 								
 								<?php

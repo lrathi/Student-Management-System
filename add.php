@@ -1,34 +1,45 @@
 <?php 
-	if(isset($_POST['addbtn'])){
+	if(isset($_POST['addbtn']))
+	{
 		$first_name = $_POST['first_name'];
 		$last_name = $_POST['last_name'];
 		$email = $_POST['email'];
 		$phone = $_POST['phone'];
 		$address = $_POST['address'];
-		/*$course = $_POST['course'];*/
+		$course = $_POST['course'];
+		$chcourse = implode(",", $course);
+
+		if(preg_match("^([9]{1})([234789]{1})([0-9]{8})$^", $phone)) 
+		{
+ 			// $phone is valid
+		}
+
+		if(preg_match("^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$^", $email))
+		{
+ 			// $email is valid
+		}
 
 		//connect database
 		$connect = mysqli_connect('localhost','root','','demo') or die (mysqli_error($connect));
-		//query
-		$query = "INSERT INTO demo_sms SET first_name='$first_name',
-											last_name='$last_name',
-											email='$email',
-											phone='$phone',
-											address='$address'";
 
+		//query
+		$query = "INSERT INTO demo_sms(first_name,last_name,email,phone,address,course) VALUES('$first_name','$last_name','$email','$phone','$address','$chcourse')";
+		
+		//execute query
 		$result = mysqli_query($connect, $query) or die(mysqli_error($connect));
-		if($result==true){
+		if($result==true)
+		{
 
 			//echo "succesful";
 			header('location:index.php');
-		} else{
+		} 
+		else
+		{
 
 			echo "Unable to Add Student Details";
 		}
 
-		}
-	
-
+	}
 ?>
 
 <!DOCTYPE html>
@@ -91,25 +102,23 @@
 							</div>
 							<div class="form-group">
 								<label for="address">Address</label>
-								<input type="text" name="address" id="address" class="form-control" placeholder="Address">
+								<textarea name="address" id="address" class="form-control" placeholder="Address">
+								</textarea>
 							</div>
 							<div class="form-group">
 								<div class="col-sm-offset-4 col-sm-12">
-									<label for="course">Courses available</label>
+									<label for="course">Courses available</label>					
 									<div>
-										<input type="checkbox" name="course[]" id="kotlin" value="kotlin">Kotlin
-									</div>							
-									<div>
-										<input type="checkbox" name="course[]" id="java" value="java">Java 
+										<input type="checkbox" name="course[]" id="java" value="Java">Java 
 									</div>
 									<div>
-										<input type="checkbox" name="course[]" id="python" value="python">Python
+										<input type="checkbox" name="course[]" id="python" value="Python">Python
 									</div>
 									<div>
-										<input type="checkbox" name="course[]" id="android" value="android">Android
+										<input type="checkbox" name="course[]" id="android" value="Android">Android
 									</div>
 									<div>
-										<input type="checkbox" name="course[]" id="excel" value="excel">Excel
+										<input type="checkbox" name="course[]" id="excel" value="MS Excel">Microsft Excel
 									</div>
 								</div>
 							</div>
