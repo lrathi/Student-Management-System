@@ -1,4 +1,8 @@
 <?php 
+
+	//connect database
+	$connect = mysqli_connect('localhost','root','','demo') or die (mysqli_error($connect));
+
 	if(isset($_POST['addbtn']))
 	{
 		$first_name = $_POST['first_name'];
@@ -6,8 +10,8 @@
 		$email = $_POST['email'];
 		$phone = $_POST['phone'];
 		$address = $_POST['address'];
-		$course = $_POST['course'];
-		$chcourse = implode(",", $course);
+		$chcourse = $_POST['course'];
+		
 
 		if(preg_match("^([9]{1})([234789]{1})([0-9]{8})$^", $phone)) 
 		{
@@ -19,28 +23,41 @@
  			// $email is valid
 		}
 
-		//connect database
-		$connect = mysqli_connect('localhost','root','','demo') or die (mysqli_error($connect));
+		//for ($i = 0; $i < count(); $i++) {}
+		if(!empty($chcourse)) 
+ 		{
+   			$N = count($chcourse);
 
-		//query
-		$query = "INSERT INTO demo_sms(first_name,last_name,email,phone,address,course) VALUES('$first_name','$last_name','$email','$phone','$address','$chcourse')";
+    		echo("You selected $N course(s): ");
+    		for($i=0; $i < $N; $i++)
+    		{
+      			echo($chcourse[$i] . " ");
+   
+
+    			/*$chcourse="";
+    			foreach ($chcourse as $selected) {
+    			$chcourse .= $course;*/
+
+    			//query
+				$query = "INSERT INTO student(first_name,last_name,email,phone,address) VALUES('$first_name','$last_name','$email','$phone','$address');";
+			
+				$query .= "INSERT INTO studentcourse(student_id,course_id) SELECT student.id, course.c_id FROM student, course WHERE student.id=LAST_INSERT_ID()";
+    		}
 		
-		//execute query
-		$result = mysqli_query($connect, $query) or die(mysqli_error($connect));
-		if($result==true)
-		{
-
-			//echo "succesful";
-			header('location:index.php');
-		} 
-		else
-		{
-
-			echo "Unable to Add Student Details";
-		}
-
+			//execute query
+			$result = mysqli_multi_query($connect, $query) or die(mysqli_error($connect));
+			if($result==true)
+			{
+				//echo "succesful";
+				header('location:index.php');
+			} 
+			else
+			{
+				echo "Unable to Add Student Details";
+			}
+	  	} 	
 	}
-?>
+?> 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -109,16 +126,16 @@
 								<div class="col-sm-offset-4 col-sm-12">
 									<label for="course">Courses available</label>					
 									<div>
-										<input type="checkbox" name="course[]" id="java" value="Java">Java 
+										<input type="checkbox" name="course[$i]" id="Java" value="Java">Java 
 									</div>
 									<div>
-										<input type="checkbox" name="course[]" id="python" value="Python">Python
+										<input type="checkbox" name="course[$i]" id="Python" value="Python">Python
 									</div>
 									<div>
-										<input type="checkbox" name="course[]" id="android" value="Android">Android
+										<input type="checkbox" name="course[$i]" id="Android" value="Android">Android
 									</div>
 									<div>
-										<input type="checkbox" name="course[]" id="excel" value="MS Excel">Microsft Excel
+										<input type="checkbox" name="course[$i]" id="MS Excel" value="Microsft Excel">Microsft Excel
 									</div>
 								</div>
 							</div>
@@ -137,4 +154,4 @@
 			All rights reserved. &COPY; 2019 LR			
 		</footer>	
 	</body>
-</html>
+</html> 

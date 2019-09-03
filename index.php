@@ -33,13 +33,13 @@
 	<body>
 		<header class = "header">
 			<h1>Student Management System</h1>
-		</header> <br><br>
+		</header> <br>
 
 		<div class="container">
 
 			<center><a href="add.php" class="btn btn-primary">Add Student</a></center>
 			<br>
-			<br>
+			<hr>
 			
 			<table class="table table-striped">
 
@@ -50,7 +50,6 @@
 			       		<th>Last Name</th>
 			        	<th>Email</th>
 			       		<th>Phone No.</th>
-			       		<th>Course(s) Selected</th>
 				   		<th>Actions</th>
 			      		</tr>
 			    </thead>
@@ -61,10 +60,11 @@
 					//connect database
 					$connect = mysqli_connect('localhost','root','','demo') or die(mysqli_error());
 					//query
-					$query = "SELECT * FROM demo_sms";
+					$query = "SELECT * FROM student";
 
 					//execute query
 					$result = mysqli_query($connect,$query) or die(mysqli_error($connect));
+					
 					$sn=1;
 					if($result == true)
 					{
@@ -72,17 +72,14 @@
 						{	?>
 
 						<tr class="text-center">
-							<td><?php echo $sn++; ?> </td>
+							<td><?php echo $sn++ ; ?> </td>
 							<td><?php echo $row['first_name']; ?> </td>
 							<td><?php echo $row['last_name']; ?> </td>
 							<td><?php echo $row['email']; ?> </td>
 							<td><?php echo $row['phone']; ?> </td>
-							<td><?php echo $row['course']; ?></td>
 							<td>
 								<a href="view.php?id=<?php echo $row['id'] ?>" class="btn btn-sm btn-info" >VIEW</a>
-							
 								<a href="update.php?id=<?php echo $row['id'] ?>" class="btn btn-sm btn-warning" >EDIT</a>
-							
 								<a href="delete.php?id=<?php echo $row['id'] ?>" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-sm btn-danger">DELETE</a>
 							</td>
 						</tr>

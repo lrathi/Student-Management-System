@@ -9,21 +9,24 @@
 		$id = $_GET['id'];
 					
 		//query
-		$query = "SELECT * FROM demo_sms WHERE id=$id";
+		$query = "SELECT S.id,S.first_name,S.last_name,S.email,S.phone,S.address,GROUP_CONCAT(DISTINCT C.c_name) as Course  FROM student AS S 
+					JOIN studentcourse AS SC ON SC.student_id = S.id   
+					JOIN course AS C ON SC.course_id = C.c_id WHERE S.id=$id";
+
 
 		//execute query
 		$result = mysqli_query($connect,$query) or die(mysqli_error($connect));
 		if($result == true)
 		{
 
-			$row = mysqli_fetch_assoc($result);
+			$row = mysqli_fetch_array($result);
 			$first_name = $row['first_name'];
 			$last_name = $row['last_name'];
 			$email = $row['email'];
 			$phone = $row['phone'];
 			$address = $row['address'];
-			$course = $row['course'];
-			$b= explode(",", $course);								
+			$c_name = $row['Course'];
+			$b= explode(",", $c_name);								
 		}
 	}
 
@@ -37,16 +40,24 @@
 		$phone = $_POST['phone'];
 		$address = $_POST['address'];
 		$c = $_POST['course'];
-		$d = implode(",", $c);
 
-   		//query
-		$query = "UPDATE demo_sms SET first_name='$first_name',
-										last_name='$last_name',
-										email='$email',
-										phone='$phone',
-										address='$address',
-										course='$d'
-								WHERE id=$id";
+		/*$arr = array(1,2,3,4);
+		$arrNames = array('Java', 'Python', 'Android', 'Microsfot Excel');
+		foreach($arr as $val) 
+		{
+    		$set_checked = "";
+   			if(in_array($val, $c))
+   			{
+        		$set_checked = "checked";
+    		}
+    		echo '<input type="checkbox" class="chk_boxes1" name="perm[]" value="$val" '.$set_checked.' > '.$arrNames[$val].' <br>'
+    	}*/
+
+   		$query = "UPDATE student
+  					INNER JOIN studentcourse ON studentcourse.student_id = student.id
+  					INNER JOIN course ON  studentcourse.course_id= course.c_id
+  					SET first_name='$first_name',last_name='$last_name',email='$email',phone='$phone',address='$address' 
+  					WHERE student.id=$id";
  								
 		//execute query
 		$result = mysqli_query($connect,$query) or die(mysqli_error($connect));
@@ -131,29 +142,17 @@
 								</tr>
 								<tr>
 									<td>Courses Available :</td>
-									<td style="text-align:center;"><b><input type="checkbox" name="course[]" id="java" value="Java"
-										<?php if (in_array("Java", $b)) {
-											echo "checked";
-										}
-										?>
+									<td style="text-align:center;"><b><input type="checkbox" name="course[]" id="Java" value="<? echo $row['id']; ?>"
+										<?php if (in_array("Java", $b)) { echo "checked";} ?>
 									 	>Java </b></td>
-									<td style="padding-right:25px"><b><input type="checkbox" name="course[]" id="python" value="Python"
-										<?php if (in_array("Python", $b)) {
-											echo "checked";
-										}
-										?>
+									<td style="padding-right:25px"><b><input type="checkbox" name="course[]" id="Python" value="<? echo $row['id']; ?>"
+										<?php if (in_array("Python", $b)) { echo "checked";} ?>
 										>Python </b></td>
-									<td style="padding-left:25px"><b><input type="checkbox" name="course[]" id="android" value="Android"
-										<?php if (in_array("Android", $b)) {
-											echo "checked";
-										}
-										?>
+									<td style="padding-left:25px"><b><input type="checkbox" name="course[]" id="Android" value="<? echo $row['id']; ?>"
+										<?php if (in_array("Android", $b)) { echo "checked";} ?>
 										>Android </b></td>
-									<td style="padding-left:50px"><b><input type="checkbox" name="course[]" id="excel" value="MS Excel"
-										<?php if (in_array("MS Excel", $b)) {
-											echo "checked";
-										}
-										?>
+									<td style="padding-left:50px"><b><input type="checkbox" name="course[]" id="MS Excel" value="<? echo $row['id']; ?>"
+										<?php if (in_array("MS Excel", $b)) { echo "checked";} ?>
 										>Excel </b></td>
 								</tr>
 								<div class="form-group">
@@ -173,6 +172,7 @@
 					</div>
 				</div>
 			</div>
+		</div>	
 		<footer class="footer">
 			All rights reserved. &COPY; 2019 LR			
 		</footer>
